@@ -1,0 +1,35 @@
+version: '3'
+services:
+  main-service:
+    container_name: main-python
+    build:
+      context: ADR
+      dockerfile: Dockerfile
+    volumes:
+    - ./ADR:/project
+    environment:
+      TZ: Asia/Seoul
+    networks:
+      - backend
+    links:
+      - mariaDB
+    depends_on:
+      - mariaDB
+
+  mariaDB:
+    image: mariadb:latest
+    ports:
+      - 4491:3306
+    volumes:
+      - ./DB/conf.d:/etc/mysql/conf.d
+      - ./DB/data:/var/lib/mysql
+      - ./DB/initdb.d:/docker-entrypoint-initdb.d
+    env_file: ./DB/.env
+    environment:
+      TZ: Asia/Seoul
+    networks:
+      - backend
+    restart: always
+
+networks:
+  backend:

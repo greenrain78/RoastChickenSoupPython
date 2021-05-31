@@ -1,0 +1,69 @@
+{
+  "version": 1,
+  "disable_existing_loggers": false,
+  "formatters": {
+    "_comment": "로그 출력 포멧 설정",
+    "file_formatter": {
+      "format": "[%(asctime)s] %(levelname)s [%(module)s %(name)s :%(lineno)s] %(message)s",
+      "datefmt": "%Y-%m-%d %H:%M:%S"
+    },
+    "console_formatter": {
+      "format": "%(asctime)s:%(name)s:%(lineno)s (%(levelname)s) %(message)s",
+      "datefmt": "%Y-%m-%d %H:%M:%S"
+    }
+  },
+  "handlers": {
+    "_comment": "로그 관리 설정 - 파일로 출력하거나 콘솔로 출력",
+    "file_handler": {
+      "class": "logging.handlers.TimedRotatingFileHandler",
+      "level": "DEBUG",
+      "formatter": "detail_formatter",
+      "filename":  "logs/debug",
+      "when": "midnight",
+      "backupCount": 30,
+      "interval": 1,
+      "encoding": "utf-8"
+    },
+    "DB_file_handler": {
+      "class": "logging.handlers.TimedRotatingFileHandler",
+      "level": "DEBUG",
+      "formatter": "detail_formatter",
+      "filename":  "logs/db/db",
+      "when": "midnight",
+      "backupCount": 30,
+      "interval": 1,
+      "encoding": "utf-8"
+    },
+    "console": {
+      "level": "DEBUG",
+      "class": "logging.StreamHandler",
+      "formatter": "console_formatter",
+      "stream": "ext://sys.stdout"
+    }
+  },
+  "loggers": {
+    "_comment": "각 모듈별 로그 설정",
+    "__main__": {
+      "level": "DEBUG",
+      "handlers": ["file_handler", "console"]
+    },
+    "ANN": {
+      "level": "DEBUG",
+      "handlers": ["file_handler", "console"]
+    },
+    "Controller": {
+      "level": "DEBUG",
+      "handlers": ["file_handler", "console"]
+    },
+    "DataAdapter": {
+      "level": "DEBUG",
+      "handlers": ["file_handler", "console"]
+    },
+    "SQL": {
+    "_comment": "아예 sql문을 저장하여 DB문제 발생시 복구",
+    "level": "DEBUG",
+    "handlers": ["DB_file_handler", "console"],
+    "propagate": false
+    }
+  }
+}
